@@ -1,7 +1,5 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class WorkingDay extends Model {
     /**
@@ -10,16 +8,23 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      WorkingDay.belongsToMany(models.User, {
+        through: 'UsersWorkingDays',
+        foreignKey: 'workingDayId',
+        as: 'employes',
+      });
     }
-  };
-  WorkingDay.init({
-    weekDay: DataTypes.STRING,
-    workingDate: DataTypes.DATE,
-    isWorking: DataTypes.BOOLEAN
-  }, {
-    sequelize,
-    modelName: 'WorkingDay',
-  });
+  }
+  WorkingDay.init(
+    {
+      weekDay: DataTypes.STRING,
+      workingDate: DataTypes.DATE,
+      isWorking: DataTypes.BOOLEAN,
+    },
+    {
+      sequelize,
+      modelName: 'WorkingDay',
+    }
+  );
   return WorkingDay;
 };
